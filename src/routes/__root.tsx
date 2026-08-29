@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { GenesisProvider } from "../lib/genesis/store";
 
 function NotFoundComponent() {
   return (
@@ -77,11 +78,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Genesis AI — Software Development Intelligence" },
+      { name: "description", content: "HPIM-powered software development intelligence for teams that ship with confidence." },
+      { name: "author", content: "Genesis AI" },
+      { property: "og:title", content: "Genesis AI — Software Development Intelligence" },
+      { property: "og:description", content: "Persistent project intelligence, change-impact analysis and specialized AI agents." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -118,9 +119,11 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
-    </QueryClientProvider>
+       <QueryClientProvider client={queryClient}>
+         <GenesisProvider>
+           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+           <Outlet />
+         </GenesisProvider>
+       </QueryClientProvider>
   );
 }
