@@ -404,8 +404,8 @@ export const demoMemoryDocs: MemoryDocument[] = [
     kind: "requirement" as const,
     title: r.title,
     content: `${r.title}. ${r.description}`,
-    component: r.linkedComponents[0],
-    file: r.linkedFiles[0],
+    ...(r.linkedComponents[0] ? { component: r.linkedComponents[0] } : {}),
+    ...(r.linkedFiles[0] ? { file: r.linkedFiles[0] } : {}),
     updatedAt: r.updatedAt,
   })),
   ...demoDecisions.map((d) => ({

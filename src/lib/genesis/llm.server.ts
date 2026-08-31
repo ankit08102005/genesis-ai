@@ -14,7 +14,7 @@ export interface LlmMessage {
 export interface LlmResult {
   text: string;
   model: string;
-  tokens?: number;
+  tokens: number | null;
 }
 
 export interface LLMProvider {
@@ -72,7 +72,7 @@ export class NvidiaProvider implements LLMProvider {
     };
     const text = json.choices?.[0]?.message?.content ?? "";
     if (!text) throw new LlmError("AI provider returned an empty response.", 502);
-    return { text, model: this.model, tokens: json.usage?.total_tokens };
+    return { text, model: this.model, tokens: json.usage?.total_tokens ?? null };
   }
 
   async generateStructured<T>(
@@ -109,7 +109,7 @@ export class LlmError extends Error {
 
 export function extractJson(text: string): unknown {
   const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
-  const candidate = fenced ? fenced[1] : text;
+  const candidate = fenced?.[1] ?? text;
   const start = candidate.indexOf("{");
   const end = candidate.lastIndexOf("}");
   if (start === -1 || end === -1) throw new LlmError("AI response was not valid structured output.", 422);
