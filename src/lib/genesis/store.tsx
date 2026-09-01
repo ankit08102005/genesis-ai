@@ -137,6 +137,7 @@ export function GenesisProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<GenesisContextValue>(() => {
     const project = state.projects.find((p) => p.id === state.activeProjectId) ?? state.projects[0];
+    if (!project) throw new Error("Genesis requires at least one project.");
     const hpim = new HpimService({
       requirements: state.requirements,
       decisions: state.decisions,
@@ -168,8 +169,8 @@ export function GenesisProvider({ children }: { children: ReactNode }) {
               kind: "requirement",
               title: input.title,
               content: `${input.title}. ${input.description}`,
-              component: input.linkedComponents[0],
-              file: input.linkedFiles[0],
+              ...(input.linkedComponents[0] ? { component: input.linkedComponents[0] } : {}),
+              ...(input.linkedFiles[0] ? { file: input.linkedFiles[0] } : {}),
               updatedAt: ts,
             },
             ...s.memoryDocs,

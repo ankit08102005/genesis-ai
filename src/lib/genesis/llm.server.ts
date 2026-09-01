@@ -36,7 +36,10 @@ export class NvidiaProvider implements LLMProvider {
     private baseUrl: string,
   ) {}
 
-  async generate(messages: LlmMessage[], opts: { temperature?: number; maxTokens?: number } = {}) {
+  async generate(
+    messages: LlmMessage[],
+    opts: { temperature?: number; maxTokens?: number } = {},
+  ): Promise<LlmResult> {
     const res = await fetch(`${this.baseUrl.replace(/\/$/, "")}/chat/completions`, {
       method: "POST",
       headers: {
@@ -79,7 +82,7 @@ export class NvidiaProvider implements LLMProvider {
     messages: LlmMessage[],
     parse: (raw: unknown) => T,
     opts: { temperature?: number; maxTokens?: number } = {},
-  ) {
+  ): Promise<{ value: T; raw: LlmResult }> {
     const raw = await this.generate(
       [
         ...messages,
