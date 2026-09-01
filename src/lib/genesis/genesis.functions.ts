@@ -14,7 +14,7 @@ export type StageResult = {
   agent: AgentKey;
   mode: "REAL" | "DEMO";
   model: string | null;
-  output: Record<string, unknown>;
+  output: Record<string, any>;
   durationMs: number;
   tokens: number | null;
   notice: string | null;
@@ -47,7 +47,7 @@ export const runAgentStage = createServerFn({ method: "POST" })
         agent,
         mode: "DEMO",
         model: null,
-        output: schema.parse(demoAgentOutput(agent, data.prompt)) as Record<string, unknown>,
+        output: schema.parse(demoAgentOutput(agent, data.prompt)) as Record<string, any>,
         durationMs: Date.now() - started,
         tokens: null,
         notice: "AI provider is not configured — showing labelled demo output.",
@@ -76,7 +76,7 @@ export const runAgentStage = createServerFn({ method: "POST" })
         agent,
         mode: "REAL",
         model: raw.model,
-        output: value as Record<string, unknown>,
+        output: value as Record<string, any>,
         durationMs: Date.now() - started,
         tokens: raw.tokens ?? null,
         notice: null,
@@ -94,7 +94,7 @@ export const runAgentStage = createServerFn({ method: "POST" })
         agent,
         mode: "DEMO",
         model: null,
-        output: schema.parse(demoAgentOutput(agent, data.prompt)) as Record<string, unknown>,
+        output: schema.parse(demoAgentOutput(agent, data.prompt)) as Record<string, any>,
         durationMs: Date.now() - started,
         tokens: null,
         notice: `${message} Falling back to labelled demo output.`,
