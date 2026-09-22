@@ -40,7 +40,10 @@ export class NvidiaProvider implements LLMProvider {
     messages: LlmMessage[],
     opts: { temperature?: number; maxTokens?: number } = {},
   ): Promise<LlmResult> {
-    const res = await fetch(`${this.baseUrl.replace(/\/$/, "")}/chat/completions`, {
+    const endpoint = this.baseUrl.replace(/\/$/, "").endsWith("/chat/completions")
+      ? this.baseUrl.replace(/\/$/, "")
+      : `${this.baseUrl.replace(/\/$/, "")}/chat/completions`;
+    const res = await fetch(endpoint, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
@@ -63,7 +66,7 @@ export class NvidiaProvider implements LLMProvider {
           ? "AI provider rejected the configured credentials."
           : res.status === 429
             ? "AI provider is rate limiting requests."
-            : "AI provider unavailable.",
+            : `AI provider unavailable (HTTP ${res.status}).`,
         res.status,
         detail.slice(0, 500),
       );
